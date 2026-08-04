@@ -1,0 +1,19 @@
+.name-description {
+  padding: 16px 24px;
+}
+
+.name-description .name-description-name {
+  font-size: var(--heading-font-size-m);
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.name-description .name-description-description {
+  color: var(--text-color);
+}
+
+@media (width >= 600px) {
+  .name-description {
+    padding: 24px 32px;
+  }
+}
