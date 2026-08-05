@@ -1,0 +1,24 @@
+sitemaps:
+  poc-eds:
+    default: en
+    lastmod: YYYY-MM-DD
+    languages:
+      en:
+        source: /query-index.json
+        destination: /sitemap-en.xml
+        hreflang: en
+      es:
+        source: /es/query-index.json
+        destination: /sitemap-es.xml
+        hreflang: es
+        alternate: /es/{path}
+      de:
+        source: /de/query-index.json
+        destination: /sitemap-de.xml
+        hreflang: de
+        alternate: /de/{path}
+      fr:
+        source: /fr/query-index.json
+        destination: /sitemap-fr.xml
+        hreflang: fr
+        alternate: /fr/{path}

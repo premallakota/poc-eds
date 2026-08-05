@@ -3,7 +3,70 @@ indices:
   query-index:
     include:
       - '/**'
+      - '!/es/**'
+      - '!/de/**'
+      - '!/fr/**'
     target: /query-index.json
+    properties:
+      title:
+        select: head > meta[property="og:title"]
+        value: attribute(el, "content")
+      description:
+        select: head > meta[name="description"]
+        value: attribute(el, "content")
+      image:
+        select: head > meta[property="og:image"]
+        value: attribute(el, "content")
+      lastModified:
+        select: none
+        value: parseTimestamp(headers["last-modified"], "ddd, DD MMM YYYY hh:mm:ss GMT")
+      robots:
+        select: head > meta[name="robots"]
+        value: attribute(el, "content")
+  es-index:
+    include:
+      - '/es/**'
+    target: /es/query-index.json
+    properties:
+      title:
+        select: head > meta[property="og:title"]
+        value: attribute(el, "content")
+      description:
+        select: head > meta[name="description"]
+        value: attribute(el, "content")
+      image:
+        select: head > meta[property="og:image"]
+        value: attribute(el, "content")
+      lastModified:
+        select: none
+        value: parseTimestamp(headers["last-modified"], "ddd, DD MMM YYYY hh:mm:ss GMT")
+      robots:
+        select: head > meta[name="robots"]
+        value: attribute(el, "content")
+  de-index:
+    include:
+      - '/de/**'
+    target: /de/query-index.json
+    properties:
+      title:
+        select: head > meta[property="og:title"]
+        value: attribute(el, "content")
+      description:
+        select: head > meta[name="description"]
+        value: attribute(el, "content")
+      image:
+        select: head > meta[property="og:image"]
+        value: attribute(el, "content")
+      lastModified:
+        select: none
+        value: parseTimestamp(headers["last-modified"], "ddd, DD MMM YYYY hh:mm:ss GMT")
+      robots:
+        select: head > meta[name="robots"]
+        value: attribute(el, "content")
+  fr-index:
+    include:
+      - '/fr/**'
+    target: /fr/query-index.json
     properties:
       title:
         select: head > meta[property="og:title"]
