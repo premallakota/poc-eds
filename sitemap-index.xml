@@ -1,7 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <sitemap>
-    <loc>/sitemap.xml</loc>
+    <loc>/sitemap-en.xml</loc>
+  </sitemap>
+  <sitemap>
+    <loc>/sitemap-es.xml</loc>
+  </sitemap>
+  <sitemap>
+    <loc>/sitemap-de.xml</loc>
+  </sitemap>
+  <sitemap>
+    <loc>/sitemap-fr.xml</loc>
   </sitemap>
   <!-- add custom sitemap entries here
   <sitemap>
