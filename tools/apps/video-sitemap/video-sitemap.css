@@ -225,6 +225,17 @@
   gap: 6px;
 }
 
+/* Sign-in warning shown when token is absent */
+.vs-signin-warning {
+  font-size: 0.82rem;
+  color: light-dark(#a05000, #ffb74d);
+  background: light-dark(#fff8e6, #2a1a00);
+  border: 1px solid light-dark(#f5d87a, #7a4800);
+  border-radius: 4px;
+  padding: 4px 10px;
+  align-self: center;
+}
+
 /* XML code preview */
 .vs-xml-preview {
   border: 1px solid light-dark(#ddd, #333);

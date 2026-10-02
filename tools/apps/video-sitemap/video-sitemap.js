@@ -254,9 +254,17 @@ class VideoSitemapApp extends LitElement {
   }
 
   // -------------------------------------------------------------------------
-  // Step 2: Publish XML → DA source → preview → live (/video-sitemap.xml)
+  // Step 2: Publish XML → source → preview → live (/video-sitemap.xml)
   // -------------------------------------------------------------------------
   async _publishXml() {
+    // Require authentication — the DA SDK token is only available when the
+    // user is signed in to da.live. Without it all admin API calls fail.
+    if (!this.token) {
+      this._errorMsg = 'You must be signed in to DA to publish. Please click "Sign in" at the top-right of the DA shell, then try again.';
+      this._state = 'error';
+      return;
+    }
+
     const { org, site } = resolveOrgSite(this.context);
     const host = (this._hostValue || '').trim().replace(/\/$/, '');
 
@@ -445,6 +453,11 @@ class VideoSitemapApp extends LitElement {
             </span>
           </div>
           <div class="vs-result-actions">
+            ${!this.token ? html`
+              <div class="vs-signin-warning">
+                ⚠️ Sign in to DA to enable publishing
+              </div>
+            ` : nothing}
             <sl-button class="pw-quiet-secondary vs-action-btn" @click=${() => this._copyXml()}>
               ${this._copied
                 ? html`<svg class="vs-icon" viewBox="0 0 18 18" aria-hidden="true"><path d="M7 13.41 2.59 9 4 7.59 7 10.58l7-7L15.41 5Z"/></svg> Copied!`
