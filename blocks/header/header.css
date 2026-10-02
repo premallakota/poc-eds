@@ -1,272 +1,492 @@
-/* header and nav layout */
+/* AIG header — navy fixed bar with megamenu flyouts */
+
 header .nav-wrapper {
-  background-color: var(--background-color);
-  width: 100%;
-  z-index: 2;
   position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background-color: #001871;
+  z-index: 100;
 }
 
 header nav {
-  box-sizing: border-box;
   display: grid;
-  grid-template:
-    'hamburger brand tools' var(--nav-height)
-    'sections sections sections' 1fr / auto 1fr auto;
+  grid-template-areas: 'hamburger brand tools' 'sections sections sections';
+  grid-template-columns: auto 1fr auto;
   align-items: center;
-  gap: 0 24px;
-  margin: auto;
-  max-width: 1248px;
-  height: var(--nav-height);
+  gap: 0 16px;
+  max-width: 1440px;
+  height: var(--nav-height, 64px);
+  margin: 0 auto;
   padding: 0 24px;
   font-family: var(--body-font-family);
 }
 
-header nav[aria-expanded='true'] {
-  grid-template:
-    'hamburger brand' var(--nav-height)
-    'sections sections' 1fr
-    'tools tools' var(--nav-height) / auto 1fr;
-  overflow-y: auto;
-  min-height: 100dvh;
+@media (width >= 900px) {
+  header nav {
+    display: flex;
+    align-items: center;
+    height: 101px;
+    padding: 0 32px;
+  }
+}
+
+/* Brand / logo */
+header nav .nav-brand {
+  grid-area: brand;
+}
+
+header nav .nav-brand p { margin: 0; }
+
+header nav .nav-logo img {
+  display: block;
+  width: auto;
+  height: 40px;
 }
 
 @media (width >= 900px) {
-  header .nav-wrapper {
-    position: relative;
-  }
+  header nav .nav-logo img { height: 48px; }
+}
 
-  header nav {
-    display: flex;
-    justify-content: space-between;
-    gap: 0 32px;
-    max-width: 1264px;
-    padding: 0 32px;
-  }
+/* Primary nav sections */
+header nav .nav-sections {
+  grid-area: sections;
+  display: none;
+}
 
-  header nav[aria-expanded='true'] {
-    min-height: 0;
-    overflow: visible;
+/* Closed mobile bar shows only logo + hamburger */
+@media (width < 900px) {
+  header nav .nav-tools {
+    display: none;
   }
 }
 
-header nav p {
+header nav .nav-sections ul {
+  list-style: none;
   margin: 0;
+  padding: 0;
+}
+
+@media (width >= 900px) {
+  header nav .nav-sections {
+    display: block;
+    flex: 1;
+    margin-left: 24px;
+  }
+
+  header nav .nav-sections .default-content-wrapper,
+  header nav .nav-sections .nav-list {
+    display: flex;
+    align-items: center;
+    gap: 0;
+  }
+}
+
+/* Top-level nav items */
+header nav .nav-sections .nav-item {
+  position: relative;
+}
+
+/* EDS may wrap the top-level link in a <p>; reset that wrapper */
+header nav .nav-sections .nav-item > p {
+  margin: 0;
+}
+
+header nav .nav-sections .nav-item > a,
+header nav .nav-sections .nav-item > p > a {
+  display: block;
+  padding: 17px 16px;
+  color: #fff;
+  font-family: var(--heading-font-family);
+  font-size: 15px;
+  font-weight: 500;
+  text-transform: uppercase;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+header nav .nav-sections .nav-item > a:hover,
+header nav .nav-sections .nav-item > p > a:hover { text-decoration: underline; }
+
+/* +/- toggle button */
+header nav .nav-sections .nav-item-toggle {
+  display: none;
+  background: none;
+  border: none;
+  color: #fff;
+  cursor: pointer;
+}
+
+header nav .nav-sections .nav-item-toggle::before {
+  content: '+';
+  font-size: 20px;
+}
+
+header nav .nav-sections .nav-item[aria-expanded='true'] .nav-item-toggle::before { content: '\2212'; }
+
+/* Flyout panel (desktop) */
+@media (width >= 900px) {
+  header nav .nav-sections .nav-drop > ul {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    min-width: 280px;
+    padding: 12px 0;
+    background-color: #fff;
+    box-shadow: 0 8px 24px rgb(0 0 0 / 15%);
+  }
+
+  header nav .nav-sections .nav-drop[aria-expanded='true'] > ul { display: block; }
+
+  header nav .nav-sections .nav-drop > ul li a {
+    display: block;
+    padding: 8px 24px;
+    color: #001871;
+    font-family: var(--body-font-family);
+    font-size: 15px;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+
+  header nav .nav-sections .nav-drop > ul li a:hover {
+    background-color: #f2f6fc;
+    text-decoration: underline;
+  }
+}
+
+/* Tools (search, worldwide, login) */
+header nav .nav-tools {
+  grid-area: tools;
+}
+
+header nav .nav-tools ul {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* stylelint-disable-next-line no-descending-specificity */
+header nav .nav-tools ul a {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: #fff;
+  font-family: var(--heading-font-family);
+  font-size: 14px;
+  text-decoration: none;
+}
+
+header nav .nav-tools .nav-worldwide img {
+  width: 22px;
+  height: 22px;
+}
+
+header nav .nav-tools .nav-worldwide { font-size: 0; }
+
+header nav .nav-tools .nav-login {
+  padding: 12px 17px;
+  border: 1px solid #fff;
+  text-transform: none;
+}
+
+header nav .nav-tools .nav-login:hover {
+  background-color: #fff;
+  color: #001871;
+}
+
+header nav .nav-search-btn {
+  width: 22px;
+  height: 22px;
+  padding: 0;
+  border: none;
+  cursor: pointer;
+  background-color: #fff;
+  mask: url('/icons/search.svg') center / contain no-repeat;
+}
+
+/* Search overlay — replaces the nav-sections row when open. Shares the
+   "sections" grid area with .nav-sections so it's never visible at the same
+   time as either the desktop link row or the mobile drawer's link list. */
+header nav .nav-search {
+  position: relative;
+  display: none;
+  grid-area: sections;
+  align-items: center;
+  gap: 16px;
+}
+
+header nav[data-search-open='true'] .nav-search {
+  display: flex;
+}
+
+header nav[data-search-open='true'] .nav-sections,
+header nav[data-search-open='true'] .nav-tools .nav-search-btn {
+  display: none;
+}
+
+@media (width >= 900px) {
+  header nav .nav-search {
+    flex: 1;
+    margin-left: 24px;
+  }
+}
+
+header nav .nav-search form {
+  position: relative;
+  flex: 1;
+}
+
+header nav .nav-search input[type='search'] {
+  box-sizing: border-box;
+  width: 100%;
+  height: 40px;
+  padding: 0 44px 0 16px;
+  border: none;
+  border-radius: 2px;
+  font-family: var(--body-font-family);
+  font-size: 16px;
+}
+
+header nav .nav-search input[type='search']::-webkit-search-cancel-button {
+  display: none;
+}
+
+header nav .nav-search-submit {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+}
+
+header nav .nav-search-submit::before {
+  content: '';
+  display: block;
+  width: 20px;
+  height: 20px;
+  margin: 10px;
+  background-color: #001871;
+  mask: url('/icons/search.svg') center / contain no-repeat;
+}
+
+header nav .nav-search-close {
+  flex-shrink: 0;
+  width: 22px;
+  height: 22px;
+  padding: 0;
+  border: none;
+  background: none;
+  color: #fff;
+  font-size: 22px;
   line-height: 1;
+  cursor: pointer;
 }
 
-header nav a:any-link {
-  color: currentcolor;
+/* Typeahead — up to 10 live suggestions under the input as the user types,
+   each showing the page title and a breadcrumb derived from its path (see
+   scripts/search.js:pathToBreadcrumb). */
+header nav .nav-search-suggestions {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  margin: 8px 0 0;
+  padding: 0;
+  list-style: none;
+  background-color: #fff;
+  box-shadow: 0 8px 24px rgb(0 0 0 / 20%);
+  max-height: 70vh;
+  overflow-y: auto;
+  z-index: 10;
 }
 
-/* hamburger */
+/* stylelint-disable-next-line no-descending-specificity */
+header nav .nav-search-suggestion a {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 12px 16px;
+  color: #001871;
+  text-decoration: none;
+}
+
+/* stylelint-disable no-descending-specificity */
+header nav .nav-search-suggestion:hover a,
+header nav .nav-search-suggestion[aria-selected='true'] a {
+  background-color: rgb(0 24 113 / 6%);
+}
+/* stylelint-enable no-descending-specificity */
+
+header nav .nav-search-suggestion-title {
+  font-family: var(--body-font-family);
+  font-size: 16px;
+}
+
+header nav .nav-search-suggestion-breadcrumb {
+  flex-shrink: 0;
+  color: #5e6875;
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+/* Hamburger (mobile) */
 header nav .nav-hamburger {
   grid-area: hamburger;
-  height: 22px;
   display: flex;
   align-items: center;
 }
 
 header nav .nav-hamburger button {
-  height: 22px;
-  margin: 0;
-  border: 0;
-  border-radius: 0;
+  width: 32px;
+  height: 32px;
   padding: 0;
-  background-color: var(--background-color);
-  color: inherit;
-  overflow: initial;
-  text-overflow: initial;
-  white-space: initial;
+  background: none;
+  border: none;
+  cursor: pointer;
 }
 
 header nav .nav-hamburger-icon,
 header nav .nav-hamburger-icon::before,
 header nav .nav-hamburger-icon::after {
-  box-sizing: border-box;
   display: block;
   position: relative;
-  width: 20px;
+  width: 24px;
+  height: 2px;
+  background-color: #fff;
+  transition: transform 0.3s ease, opacity 0.3s ease;
 }
 
 header nav .nav-hamburger-icon::before,
 header nav .nav-hamburger-icon::after {
   content: '';
   position: absolute;
-  background: currentcolor;
+  left: 0;
 }
 
-header nav[aria-expanded='false'] .nav-hamburger-icon,
-header nav[aria-expanded='false'] .nav-hamburger-icon::before,
-header nav[aria-expanded='false'] .nav-hamburger-icon::after {
-  height: 2px;
-  border-radius: 2px;
-  background: currentcolor;
-}
+header nav .nav-hamburger-icon::before { top: -7px; }
+header nav .nav-hamburger-icon::after { top: 7px; }
 
-header nav[aria-expanded='false'] .nav-hamburger-icon::before {
-  top: -6px;
-}
+/* Hamburger morphs to cross when open */
+header nav[aria-expanded='true'] .nav-hamburger-icon { background-color: transparent; }
 
-header nav[aria-expanded='false'] .nav-hamburger-icon::after {
-  top: 6px;
-}
-
-header nav[aria-expanded='true'] .nav-hamburger-icon {
-  height: 22px;
-}
-
-header nav[aria-expanded='true'] .nav-hamburger-icon::before,
-header nav[aria-expanded='true'] .nav-hamburger-icon::after {
-  top: 3px;
-  left: 1px;
+header nav[aria-expanded='true'] .nav-hamburger-icon::before {
+  top: 0;
   transform: rotate(45deg);
-  transform-origin: 2px 1px;
-  width: 24px;
-  height: 2px;
-  border-radius: 2px;
 }
 
 header nav[aria-expanded='true'] .nav-hamburger-icon::after {
-  top: unset;
-  bottom: 3px;
+  top: 0;
   transform: rotate(-45deg);
 }
 
 @media (width >= 900px) {
-  header nav .nav-hamburger {
-    display: none;
-    visibility: hidden;
-  }
+  header nav .nav-hamburger { display: none; }
 }
 
-/* brand */
-header .nav-brand {
-  grid-area: brand;
-  flex-basis: 128px;
-  font-size: var(--heading-font-size-s);
-  font-weight: 700;
-  line-height: 1;
-}
-
-header nav .nav-brand img {
-  width: 128px;
-  height: auto;
-}
-
-/* sections */
-header nav .nav-sections {
-  grid-area: sections;
-  flex: 1 1 auto;
-  display: none;
-  visibility: hidden;
-}
-
-header nav[aria-expanded='true'] .nav-sections {
-  display: block;
-  visibility: visible;
-  align-self: start;
-}
-
-header nav .nav-sections ul {
-  list-style: none;
-  padding-left: 0;
-  font-size: var(--body-font-size-s);
-}
-
-header nav .nav-sections ul > li {
-  font-weight: 500;
-}
-
-header nav .nav-sections ul > li > ul {
-  margin-top: 0;
-}
-
-header nav .nav-sections ul > li > ul > li {
-  font-weight: 400;
-}
-
-@media (width >= 900px) {
-  header nav .nav-sections {
+/* Mobile: expanded menu as full-height navy drawer */
+@media (width < 900px) {
+  header nav[aria-expanded='true'] .nav-sections,
+  header nav[aria-expanded='true'] .nav-tools {
     display: block;
-    visibility: visible;
-    white-space: nowrap;
+    position: fixed;
+    left: 0;
+    width: 100%;
+    box-sizing: border-box;
+    background-color: #001871;
+    z-index: 3;
   }
 
   header nav[aria-expanded='true'] .nav-sections {
-    align-self: unset;
+    top: var(--nav-height, 64px);
+    bottom: 0;
+    padding: 8px 24px;
+    overflow-y: auto;
   }
 
-  header nav .nav-sections .nav-drop {
-    position: relative;
-    padding-right: 16px;
-    cursor: pointer;
+  header nav[aria-expanded='true'] .nav-sections .default-content-wrapper,
+  header nav[aria-expanded='true'] .nav-sections .nav-list {
+    display: block;
+    width: 100%;
   }
 
-  header nav .nav-sections .nav-drop::after {
-    content: '';
-    display: inline-block;
-    position: absolute;
-    top: 0.5em;
-    right: 2px;
-    transform: rotate(135deg);
-    width: 6px;
-    height: 6px;
-    border: 2px solid currentcolor;
-    border-radius: 0 1px 0 0;
-    border-width: 2px 2px 0 0;
+  header nav[aria-expanded='true'] .nav-sections .nav-item {
+    width: 100%;
+    border-top: 1px solid rgb(255 255 255 / 20%);
   }
 
-  header nav .nav-sections .nav-drop[aria-expanded='true']::after {
-    top: unset;
-    bottom: 0.5em;
-    transform: rotate(315deg);
+  header nav .nav-sections .nav-item > a,
+  header nav .nav-sections .nav-item > p > a {
+    padding: 14px 0;
+    color: #fff;
   }
 
-  header nav .nav-sections ul {
-    display: flex;
-    gap: 24px;
-    margin: 0;
-  }
-
-  header nav .nav-sections .default-content-wrapper > ul > li {
-    flex: 0 1 auto;
-    position: relative;
-  }
-
-  header nav .nav-sections .default-content-wrapper > ul > li > ul {
-    display: none;
-    position: relative;
-  }
-
-  header nav .nav-sections .default-content-wrapper > ul > li[aria-expanded='true'] > ul {
+  header nav .nav-sections .nav-item-toggle {
     display: block;
     position: absolute;
-    left: -24px;
-    width: 200px;
-    top: 150%;
-    padding: 16px;
-    background-color: var(--light-color);
-    white-space: initial;
+    top: 8px;
+    right: 0;
   }
 
-  header nav .nav-sections .default-content-wrapper > ul > li > ul::before {
-    content: '';
-    position: absolute;
-    top: -8px;
-    left: 16px;
-    width: 0;
-    height: 0;
-    border-left: 8px solid transparent;
-    border-right: 8px solid transparent;
-    border-bottom: 8px solid var(--light-color);
+  header nav .nav-sections .nav-drop > ul {
+    display: none;
+    padding: 0 0 12px 16px;
   }
 
-  header nav .nav-sections .default-content-wrapper > ul > li > ul > li {
+  header nav .nav-sections .nav-drop[aria-expanded='true'] > ul { display: block; }
+
+  header nav .nav-sections .nav-drop > ul li a {
+    display: block;
     padding: 8px 0;
+    color: #fff;
+    font-size: 14px;
+    text-decoration: none;
+  }
+
+  /* Tools pinned to the bottom of the drawer */
+  header nav[aria-expanded='true'] .nav-tools {
+    bottom: 0;
+    padding: 16px 24px;
+    border-top: 1px solid rgb(255 255 255 / 20%);
+  }
+
+  /* stylelint-disable-next-line no-descending-specificity */
+  header nav[aria-expanded='true'] .nav-tools ul {
+    justify-content: flex-start;
+    gap: 24px;
+  }
+
+  /* The search trigger only exists inside the drawer's tools row, so search
+     can only be opened once the drawer is open — once it is, the search bar
+     replaces that row's link list rather than the full-height nav-sections
+     list, since the tools row is where the trigger lives. */
+  header nav[aria-expanded='true'][data-search-open='true'] .nav-tools ul {
+    display: none;
+  }
+
+  header nav[data-search-open='true'] .nav-search {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 16px 24px;
+    background-color: #001871;
+    z-index: 3;
+    border-top: 1px solid rgb(255 255 255 / 20%);
   }
 }
 
-/* tools */
-header nav .nav-tools {
-  grid-area: tools;
+body.nav-open {
+  overflow: hidden;
 }

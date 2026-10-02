@@ -1,0 +1,114 @@
+/*
+ * Video Feature block
+ * Static poster + heading + description, two-column feature layout.
+ * Values extracted from https://www.aig.com/home (.aig-video).
+ */
+
+.video-feature {
+  margin: 32px 0 24px;
+  color: var(--text-color);
+}
+
+/* single row wraps a single cell holding poster + h3 + description */
+.video-feature > div > div {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* --- Poster (image + play affordance) --- */
+.video-feature p.video-feature-poster {
+  position: relative;
+  margin: 0;
+  aspect-ratio: 5 / 3;
+  background-color: rgb(239 239 239);
+  overflow: hidden;
+  line-height: 0;
+}
+
+.video-feature p.video-feature-poster picture {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.video-feature p.video-feature-poster img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* "Play Video" label bottom-right, navy background */
+.video-feature p.video-feature-poster::after {
+  content: "Play Video \25B6";
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  padding: 14px 28px;
+  background-color: var(--heading-color);
+  color: #fff;
+  font-family: var(--heading-font-family);
+  font-size: 18px;
+  font-weight: 500;
+  line-height: normal;
+  letter-spacing: 0.02em;
+}
+
+/* --- Text --- */
+.video-feature h3 {
+  margin: 0;
+  color: var(--heading-color);
+  font-family: var(--heading-font-family);
+  font-size: 24px;
+  font-weight: 500;
+  line-height: 1.28;
+}
+
+.video-feature .video-feature-poster + h3 {
+  margin-top: 0;
+}
+
+.video-feature p:not(.video-feature-poster) {
+  margin: 16px 0 0;
+  color: var(--text-color);
+  font-family: var(--body-font-family);
+  font-size: var(--body-font-size-m);
+  line-height: 1.52;
+}
+
+@media (width >= 900px) {
+  .video-feature > div > div {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    gap: 0;
+  }
+
+  /* poster spans left column, full height of the row */
+  .video-feature p.video-feature-poster {
+    grid-row: 1 / span 2;
+    grid-column: 1;
+    align-self: stretch;
+    aspect-ratio: 5 / 3;
+  }
+
+  .video-feature h3 {
+    grid-row: 1;
+    grid-column: 2;
+    align-self: end;
+    padding-left: 48px;
+    font-size: 28px;
+    line-height: 36px;
+  }
+
+  .video-feature p:not(.video-feature-poster) {
+    grid-row: 2;
+    grid-column: 2;
+    align-self: start;
+    padding-left: 48px;
+  }
+
+  .video-feature p.video-feature-poster::after {
+    font-size: 20px;
+  }
+}

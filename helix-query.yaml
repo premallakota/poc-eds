@@ -3,9 +3,6 @@ indices:
   query-index:
     include:
       - '/**'
-      - '!/es/**'
-      - '!/de/**'
-      - '!/fr/**'
     target: /query-index.json
     properties:
       title:
@@ -23,10 +20,16 @@ indices:
       robots:
         select: head > meta[name="robots"]
         value: attribute(el, "content")
-  es-index:
+      hidenav:
+        select: head > meta[name="hidenav"]
+        value: attribute(el, "content")
+      bodyText:
+        select: main
+        value: words(textContent(el), 0, 300)
+  article-index:
     include:
-      - '/es/**'
-    target: /es/query-index.json
+      - '/**'
+    target: /article-index.json
     properties:
       title:
         select: head > meta[property="og:title"]
@@ -34,8 +37,11 @@ indices:
       description:
         select: head > meta[name="description"]
         value: attribute(el, "content")
-      image:
-        select: head > meta[property="og:image"]
+      template:
+        select: head > meta[name="template"]
+        value: attribute(el, "content")
+      publishdate:
+        select: head > meta[name="publishdate"]
         value: attribute(el, "content")
       lastModified:
         select: none
@@ -43,10 +49,10 @@ indices:
       robots:
         select: head > meta[name="robots"]
         value: attribute(el, "content")
-  de-index:
+  video-index:
     include:
-      - '/de/**'
-    target: /de/query-index.json
+      - '/**'
+    target: /video-index.json
     properties:
       title:
         select: head > meta[property="og:title"]
@@ -57,26 +63,12 @@ indices:
       image:
         select: head > meta[property="og:image"]
         value: attribute(el, "content")
-      lastModified:
-        select: none
-        value: parseTimestamp(headers["last-modified"], "ddd, DD MMM YYYY hh:mm:ss GMT")
-      robots:
-        select: head > meta[name="robots"]
-        value: attribute(el, "content")
-  fr-index:
-    include:
-      - '/fr/**'
-    target: /fr/query-index.json
-    properties:
-      title:
-        select: head > meta[property="og:title"]
-        value: attribute(el, "content")
-      description:
-        select: head > meta[name="description"]
-        value: attribute(el, "content")
-      image:
-        select: head > meta[property="og:image"]
-        value: attribute(el, "content")
+      videourl:
+        select: main .video-feature a
+        value: attribute(el, "href")
+      videothumbnail:
+        select: main .video-feature img
+        value: attribute(el, "src")
       lastModified:
         select: none
         value: parseTimestamp(headers["last-modified"], "ddd, DD MMM YYYY hh:mm:ss GMT")

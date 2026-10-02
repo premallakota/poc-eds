@@ -1,0 +1,17 @@
+.dm-image picture {
+  display: block;
+  line-height: 0;
+}
+
+.dm-image img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.dm-image .dm-image-caption {
+  margin: 8px 0 0;
+  color: var(--text-color);
+  font-size: var(--body-font-size-xs);
+  text-align: center;
+}

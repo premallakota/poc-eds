@@ -1,0 +1,55 @@
+.form form {
+  display: flex;
+  max-width: 560px;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.form .form-description {
+  margin: 0 0 8px;
+}
+
+.form .form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.form .form-field label {
+  font-weight: 600;
+}
+
+.form .form-field input,
+.form .form-field textarea {
+  box-sizing: border-box;
+  width: 100%;
+  border: 1px solid var(--dark-color);
+  border-radius: 4px;
+  padding: 10px 12px;
+  font: inherit;
+  scroll-margin-top: calc(var(--nav-height) + 16px);
+}
+
+.form .form-field textarea {
+  resize: vertical;
+}
+
+.form .form-recaptcha {
+  min-height: 78px;
+}
+
+.form .form-status {
+  margin: 0;
+  font-weight: 600;
+}
+
+.form button.button {
+  align-self: flex-start;
+}
+
+@media (width >= 600px) {
+  .form .form-field input,
+  .form .form-field textarea {
+    padding: 12px 14px;
+  }
+}

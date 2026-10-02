@@ -1,0 +1,38 @@
+{
+  "variantName": "video-feature",
+  "baseBlock": "video",
+  "version": "1.0.0",
+  "created": "2026-07-16T15:02:00.000Z",
+  "sourceContext": {
+    "originUrl": "https://www.aig.com/home",
+    "originPage": "AIG corporate homepage",
+    "blockPosition": "middle"
+  },
+  "visualCharacteristics": {
+    "colorScheme": "light",
+    "density": "spacious",
+    "purpose": "feature",
+    "imagePattern": "large"
+  },
+  "contentPattern": {
+    "structure": "poster image + video URL",
+    "buttonCount": 0,
+    "imageCount": 1
+  },
+  "reuseGuidance": {
+    "suitableFor": [
+      "featured standalone video with poster image",
+      "leadership/CEO message videos",
+      "marketing or event highlight videos"
+    ],
+    "notSuitableFor": [
+      "multiple videos in a gallery (use carousel)",
+      "inline text-referenced links without embedding"
+    ]
+  },
+  "usage": {
+    "pagesUsing": ["/home"],
+    "reuseCount": 1,
+    "lastUsed": "2026-07-16T15:02:00.000Z"
+  }
+}

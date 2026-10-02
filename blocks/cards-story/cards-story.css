@@ -1,0 +1,170 @@
+/* Block: cards-story — CSS derived from AIG homepage teaser computed styles */
+
+/* ---------------------------------------------------------------------------
+   DEFAULT VARIANT — compact two-up "story" teasers
+   (AIG .teaserflex.teaser — square image left, content right, 2 across)
+   --------------------------------------------------------------------------- */
+
+.cards-story > ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 32px;
+}
+
+.cards-story > ul > li {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 24px;
+  background-color: transparent;
+  border: 0;
+}
+
+.cards-story .cards-story-card-image {
+  flex: 0 0 auto;
+  line-height: 0;
+}
+
+.cards-story .cards-story-card-image picture,
+.cards-story .cards-story-card-image img {
+  display: block;
+}
+
+.cards-story .cards-story-card-image img {
+  width: 190px;
+  height: 190px;
+  object-fit: cover;
+}
+
+.cards-story .cards-story-card-body {
+  flex: 1 1 auto;
+}
+
+/* Heading — futura navy, 24px */
+.cards-story .cards-story-card-body h2,
+.cards-story .cards-story-card-body h3,
+.cards-story .cards-story-card-body h4 {
+  margin: 0 0 16px;
+  padding: 0;
+  color: var(--heading-color);
+  font-family: var(--heading-font-family);
+  font-weight: 400;
+  font-size: 24px;
+  line-height: 30px;
+}
+
+.cards-story .cards-story-card-body h2 a:any-link,
+.cards-story .cards-story-card-body h3 a:any-link,
+.cards-story .cards-story-card-body h4 a:any-link {
+  color: inherit;
+  text-decoration: none;
+}
+
+.cards-story .cards-story-card-body h2 a:hover,
+.cards-story .cards-story-card-body h3 a:hover,
+.cards-story .cards-story-card-body h4 a:hover {
+  text-decoration: underline;
+}
+
+/* Description paragraph — 20px, brand navy (source "corebluetext") */
+.cards-story .cards-story-card-body p {
+  margin: 0 0 16px;
+  color: var(--heading-color);
+  font-size: 20px;
+  line-height: 28px;
+}
+
+/* CTA link — futura medium, brand blue, arrow suffix, no underline */
+.cards-story .cards-story-card-body p:last-child {
+  margin-bottom: 0;
+}
+
+.cards-story .cards-story-card-body p:last-child a:any-link {
+  display: inline-block;
+  color: var(--link-color);
+  font-family: var(--heading-font-family);
+  font-weight: 500;
+  font-size: 20px;
+  line-height: 36px;
+  text-decoration: none;
+}
+
+.cards-story .cards-story-card-body p:last-child a:any-link::after {
+  content: "";
+  display: inline-block;
+  width: 1.1em;
+  height: 0.7em;
+  margin-left: 0.4em;
+  background-color: currentcolor;
+  mask: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 16"><path d="M15 1l7 7-7 7M0 8h21" stroke="black" stroke-width="2" fill="none"/></svg>') no-repeat center / contain;
+}
+
+.cards-story .cards-story-card-body p:last-child a:hover {
+  color: var(--link-hover-color);
+  text-decoration: none;
+}
+
+/* Two-up side-by-side on tablet/desktop */
+@media (width >= 900px) {
+  .cards-story > ul {
+    grid-template-columns: 1fr 1fr;
+    gap: 24px 48px;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   PALEBLUE SECTION VARIANT — large "cta-with-image" teasers
+   (full-width cards stacked, large image beside text, alternating sides)
+   --------------------------------------------------------------------------- */
+
+@media (width >= 900px) {
+  .section.paleblue .cards-story > ul {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+
+  .section.paleblue .cards-story > ul > li {
+    align-items: center;
+    gap: 48px;
+  }
+
+  /* alternate image side: odd cards get image on the right (matches source) */
+  .section.paleblue .cards-story > ul > li:nth-child(odd) {
+    flex-direction: row-reverse;
+  }
+
+  .section.paleblue .cards-story .cards-story-card-image {
+    flex: 1 1 55%;
+    max-width: 55%;
+  }
+
+  .section.paleblue .cards-story .cards-story-card-image img {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 646 / 283;
+    object-fit: cover;
+  }
+
+  .section.paleblue .cards-story .cards-story-card-body {
+    flex: 1 1 45%;
+  }
+
+  /* larger heading for the big teasers */
+  .section.paleblue .cards-story .cards-story-card-body h2,
+  .section.paleblue .cards-story .cards-story-card-body h3,
+  .section.paleblue .cards-story .cards-story-card-body h4 {
+    font-family: var(--heading-font-family);
+    font-weight: 500;
+    font-size: 28px;
+    line-height: 36px;
+  }
+
+  /* body text in the big teasers uses standard text color */
+  .section.paleblue .cards-story .cards-story-card-body p {
+    color: var(--text-color);
+    line-height: 30px;
+  }
+}

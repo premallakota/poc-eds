@@ -1,0 +1,27 @@
+/* AIG brand tokens extracted from https://www.aig.com/home */
+:root {
+  /* fonts — AIG uses proprietary Futura PT (headings) + Source Sans Pro (body).
+     Headings map to a geometric-sans system stack; body to Source Sans 3 (open equivalent). */
+  --heading-font-family: "Jost", "Century Gothic", "Twentieth Century", "URW Geometric", "Avenir Next", avenir, helvetica, arial, sans-serif;
+  --body-font-family: "Source Sans 3", "Source Sans Pro", -apple-system, blinkmacsystemfont, "Segoe UI", roboto, helvetica, arial, sans-serif;
+
+  /* colors */
+  --background-color: #fff;
+  --text-color: #343741;
+  --link-color: #1352de;
+  --link-hover-color: #23527c;
+  --heading-color: #001871;
+  --paleblue-color: #c7dbf4;
+
+  /* spacing */
+  --section-padding: 100px;
+  --nav-height: 64px;
+
+  /* heading sizes (desktop) */
+  --heading-size-xxl: 44px;
+  --heading-size-xl: 44px;
+  --heading-size-l: 24px;
+  --heading-size-m: 20px;
+  --heading-size-s: 18px;
+  --heading-size-xs: 16px;
+}

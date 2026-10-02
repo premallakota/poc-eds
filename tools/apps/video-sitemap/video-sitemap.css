@@ -1,0 +1,372 @@
+/*
+ * Copyright 2026 Adobe Systems Incorporated
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/* ==========================================================================
+   Host element
+   ========================================================================== */
+
+:host {
+  display: block;
+  font-family: var(--spectrum-sans-font-family-stack, adobe-clean, 'Source Sans Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif);
+  color: light-dark(#222, #eee);
+  box-sizing: border-box;
+}
+
+/* ==========================================================================
+   Toolbar / form
+   ========================================================================== */
+
+.vs-toolbar {
+  padding: 24px 24px 0;
+  border-bottom: 1px solid light-dark(#e0e0e0, #333);
+  background: light-dark(#fff, #1a1a1a);
+}
+
+.vs-header {
+  margin-bottom: 16px;
+}
+
+.vs-title {
+  margin: 0 0 6px;
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: light-dark(#1a1a1a, #f0f0f0);
+}
+
+.vs-subtitle {
+  margin: 0;
+  font-size: 0.9rem;
+  color: light-dark(#555, #aaa);
+  line-height: 1.5;
+}
+
+.vs-subtitle code {
+  background: light-dark(#f4f4f4, #2c2c2c);
+  padding: 1px 5px;
+  border-radius: 3px;
+  font-size: 0.85em;
+}
+
+/* Form row */
+.vs-form {
+  display: flex;
+  align-items: flex-end;
+  gap: 12px;
+  padding-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.vs-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.vs-field--grow {
+  flex: 1 1 280px;
+}
+
+.vs-label {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: light-dark(#444, #bbb);
+  letter-spacing: 0.02em;
+}
+
+.vs-generate-btn {
+  flex-shrink: 0;
+  align-self: flex-end;
+}
+
+/* ==========================================================================
+   Content wrapper
+   ========================================================================== */
+
+.vs-content {
+  padding: 24px;
+}
+
+/* ==========================================================================
+   Loading / generating spinner
+   ========================================================================== */
+
+.vs-status {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  padding: 48px 24px;
+  text-align: center;
+  color: light-dark(#555, #aaa);
+}
+
+.vs-status code {
+  word-break: break-all;
+  background: light-dark(#f4f4f4, #2c2c2c);
+  padding: 2px 6px;
+  border-radius: 3px;
+  font-size: 0.85em;
+}
+
+.vs-spinner {
+  width: 36px;
+  height: 36px;
+  border: 3px solid light-dark(#e0e0e0, #444);
+  border-top-color: var(--spectrum-blue-900, #1473e6);
+  border-radius: 50%;
+  animation: vs-spin 0.8s linear infinite;
+}
+
+@keyframes vs-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ==========================================================================
+   Error / info message banner
+   ========================================================================== */
+
+.vs-message {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 14px 16px;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  border: 1px solid transparent;
+}
+
+.vs-message--error {
+  background: light-dark(#fff5f5, #2d1515);
+  border-color: light-dark(#f5b8b8, #7a2f2f);
+  color: light-dark(#c00, #ff8080);
+}
+
+/* ==========================================================================
+   Shared icon
+   ========================================================================== */
+
+.vs-icon {
+  flex-shrink: 0;
+  width: 16px;
+  height: 16px;
+  fill: currentColor;
+  vertical-align: middle;
+}
+
+.vs-icon--success {
+  color: light-dark(#2d9d2d, #4caf50);
+}
+
+/* ==========================================================================
+   Result panel
+   ========================================================================== */
+
+.vs-result {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Result header row: meta info + action buttons */
+.vs-result-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding: 14px 16px;
+  background: light-dark(#f0faf0, #162016);
+  border: 1px solid light-dark(#b6deb6, #2e4e2e);
+  border-radius: 8px;
+}
+
+.vs-result-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.9rem;
+  color: light-dark(#222, #ddd);
+  flex-wrap: wrap;
+}
+
+.vs-result-meta code {
+  background: light-dark(#e4f4e4, #213521);
+  padding: 1px 5px;
+  border-radius: 3px;
+  font-size: 0.85em;
+  word-break: break-all;
+}
+
+.vs-result-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.vs-action-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* XML code preview */
+.vs-xml-preview {
+  border: 1px solid light-dark(#ddd, #333);
+  border-radius: 8px;
+  overflow: hidden;
+  background: light-dark(#fafafa, #161616);
+  max-height: 480px;
+  overflow-y: auto;
+}
+
+.vs-xml-code {
+  margin: 0;
+  padding: 16px 20px;
+  font-family: 'Source Code Pro', 'Fira Code', 'Cascadia Code', Consolas, 'Courier New', monospace;
+  font-size: 0.78rem;
+  line-height: 1.55;
+  color: light-dark(#1a1a2e, #c9d1d9);
+  white-space: pre;
+  overflow-x: auto;
+  tab-size: 2;
+}
+
+.vs-xml-code code {
+  font-family: inherit;
+}
+
+/* Result footer */
+.vs-result-footer {
+  display: flex;
+  justify-content: flex-start;
+}
+
+/* ==========================================================================
+   Published success state
+   ========================================================================== */
+
+.vs-published {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 40px 24px;
+  gap: 16px;
+}
+
+.vs-published-icon {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: light-dark(#e6f4e6, #1a3a1a);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: light-dark(#2d9d2d, #4caf50);
+}
+
+.vs-published-icon svg {
+  width: 30px;
+  height: 30px;
+  fill: currentColor;
+}
+
+.vs-published-heading {
+  margin: 0;
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: light-dark(#1a7a1a, #4caf50);
+}
+
+.vs-published-body {
+  margin: 0;
+  font-size: 0.9rem;
+  color: light-dark(#444, #bbb);
+  line-height: 1.6;
+}
+
+.vs-live-link {
+  display: inline-block;
+  margin-top: 4px;
+  color: light-dark(#1473e6, #4da6ff);
+  font-family: 'Source Code Pro', Consolas, monospace;
+  font-size: 0.85em;
+  word-break: break-all;
+  text-decoration: underline;
+}
+
+.vs-published-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 8px;
+}
+
+/* ==========================================================================
+   Accent button overrides (if sl-button tokens not available)
+   ========================================================================== */
+
+.pw-fill-accent {
+  --sl-button-background: var(--spectrum-blue-900, #1473e6);
+  --sl-button-color: #fff;
+}
+
+.pw-fill-accent:hover {
+  --sl-button-background: var(--spectrum-blue-1000, #0d66d0);
+}
+
+.pw-quiet-secondary {
+  --sl-button-background: transparent;
+  --sl-button-border-color: light-dark(#ccc, #555);
+  --sl-button-color: light-dark(#333, #ddd);
+}
+
+/* ==========================================================================
+   Responsive
+   ========================================================================== */
+
+@media (max-width: 600px) {
+  .vs-toolbar {
+    padding: 16px 16px 0;
+  }
+
+  .vs-content {
+    padding: 16px;
+  }
+
+  .vs-form {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .vs-generate-btn {
+    align-self: stretch;
+  }
+
+  .vs-result-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .vs-result-actions {
+    width: 100%;
+    justify-content: flex-end;
+  }
+}

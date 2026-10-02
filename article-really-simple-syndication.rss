@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0">
+<channel>
+ <title>AIG Stories/Articles</title>
+ <description>This is feed of AIG Stories/Articles pages</description>
+ <link>https://main--aig-eds-migration-poc--kprasad05.aem.live</link>
+ <copyright>Copyright © 2026 American International Group, Inc. All rights reserved.</copyright>
+ <lastBuildDate>2026-10-01T12:34:45.984+0000</lastBuildDate>
+ <pubDate>2026-10-01T12:34:45.984+0000</pubDate>
+	<item>
+	<title>ARTICLE 1</title>
+	<description>Testing rss feed</description>
+	<link>https://main--aig-eds-migration-poc--kprasad05.aem.live/articles/article1</link>
+	<pubDate>2026-10-09T00:00:00.000+0000</pubDate>
+	</item>
+	<item>
+	<title>ARTICLE 3</title>
+	<description>Testing rss feed 3</description>
+	<link>https://main--aig-eds-migration-poc--kprasad05.aem.live/articles/article3</link>
+	<pubDate>2026-10-09T00:00:00.000+0000</pubDate>
+	</item>
+	<item>
+	<title>ARTICLE 4</title>
+	<description>Testing rss feed</description>
+	<link>https://main--aig-eds-migration-poc--kprasad05.aem.live/articles/article4</link>
+	<pubDate>2026-10-16T00:00:00.000+0000</pubDate>
+	</item>
+	<item>
+	<title>ARTICLE 5</title>
+	<description>Testing rss feed 5</description>
+	<link>https://main--aig-eds-migration-poc--kprasad05.aem.live/articles/article5</link>
+	<pubDate>2026-10-09T00:00:00.000+0000</pubDate>
+	</item>
+</channel>
+</rss>

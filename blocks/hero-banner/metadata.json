@@ -1,0 +1,38 @@
+{
+  "variantName": "hero-banner",
+  "baseBlock": "hero",
+  "version": "1.0.0",
+  "created": "2026-07-16T15:02:00.000Z",
+  "sourceContext": {
+    "originUrl": "https://www.aig.com/home",
+    "originPage": "AIG corporate homepage",
+    "blockPosition": "top"
+  },
+  "visualCharacteristics": {
+    "colorScheme": "light",
+    "density": "minimal",
+    "purpose": "hero",
+    "imagePattern": "large"
+  },
+  "contentPattern": {
+    "structure": "background image + heading + description + CTA",
+    "buttonCount": 1,
+    "imageCount": 1
+  },
+  "reuseGuidance": {
+    "suitableFor": [
+      "full-width banner intros with a background photo",
+      "top-of-page hero banners",
+      "full-bleed call-to-action banners mid-page (e.g. careers CTA)"
+    ],
+    "notSuitableFor": [
+      "text-only intros with no background image",
+      "repeating card-like content"
+    ]
+  },
+  "usage": {
+    "pagesUsing": ["/home"],
+    "reuseCount": 2,
+    "lastUsed": "2026-07-16T15:02:00.000Z"
+  }
+}

@@ -1,0 +1,160 @@
+name: Publish Screenshot POC
+on:
+  workflow_dispatch:
+  repository_dispatch:
+    types: [resource-published]
+
+jobs:
+  screenshot:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Show payload
+        run: echo '${{ toJSON(github.event.client_payload) }}'
+
+      - name: Build page URL
+        id: build_url
+        run: |
+          PAGE_PATH="${{ github.event.client_payload.path }}"
+          ORG="${{ github.event.client_payload.org }}"
+          SITE="${{ github.event.client_payload.site }}"
+
+          if [ -z "$PAGE_PATH" ]; then
+            PAGE_PATH="/"
+          fi
+
+          # strip .md and trailing "home" the way EDS does, minimal version:
+          PAGE_PATH="${PAGE_PATH%.md}"
+
+          PAGE_URL="https://main--${SITE}--${ORG}.aem.page${PAGE_PATH}"
+          echo "page_url=$PAGE_URL" >> "$GITHUB_OUTPUT"
+          echo "Resolved page URL: $PAGE_URL"
+
+      - name: Call Microlink screenshot API
+        id: microlink
+        run: |
+          curl -s "https://api.microlink.io/?url=${{ steps.build_url.outputs.page_url }}&screenshot=true&meta=true" \
+            -o response.json
+          cat response.json
+
+      - name: Build output JSON
+        id: build_output
+        run: |
+          PAGE_URL="${{ steps.build_url.outputs.page_url }}"
+          jq -n \
+            --arg pageTitle "$(jq -r '.data.title // empty' response.json)" \
+            --arg previewUrl "$PAGE_URL" \
+            '{"page-title": $pageTitle, "preview-url": $previewUrl}' \
+            > output.json
+
+          echo "Output JSON:"
+          cat output.json
+
+          echo "### Publish Screenshot Output" >> "$GITHUB_STEP_SUMMARY"
+          echo '```json' >> "$GITHUB_STEP_SUMMARY"
+          cat output.json >> "$GITHUB_STEP_SUMMARY"
+          echo '```' >> "$GITHUB_STEP_SUMMARY"
+
+          {
+            echo "output_json<<EOF"
+            cat output.json
+            echo "EOF"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Build workflow details JSON from Supabase
+        id: build_workflow_details
+        env:
+          # Supabase publishable key — safe to expose (RLS-guarded, read-only here).
+          SUPABASE_URL: https://hlsbfggivfgkqxzmqvgo.supabase.co
+          SUPABASE_KEY: sb_publishable_iU5SL93AmI2tCSCvW-SEeQ_bgAODIGB
+        run: |
+          PAGE_URL="${{ steps.build_url.outputs.page_url }}"
+
+          # Most recent workflow_requests row for this preview URL.
+          curl -s -G "$SUPABASE_URL/rest/v1/workflow_requests" \
+            --data-urlencode "preview_url=eq.$PAGE_URL" \
+            --data-urlencode "order=workflowid.desc" \
+            --data-urlencode "limit=1" \
+            --data-urlencode "select=*" \
+            -H "apikey: $SUPABASE_KEY" \
+            -H "Authorization: Bearer $SUPABASE_KEY" \
+            -o workflow.json
+          echo "workflow_requests response:"
+          cat workflow.json
+
+          # Compliance artifacts sharing that workflowid (empty array if none/no row).
+          WORKFLOW_ID="$(jq -r '.[0].workflowid // empty' workflow.json)"
+          if [ -n "$WORKFLOW_ID" ]; then
+            curl -s -G "$SUPABASE_URL/rest/v1/compliance_artifacts" \
+              --data-urlencode "workflowid=eq.$WORKFLOW_ID" \
+              --data-urlencode "select=*" \
+              -H "apikey: $SUPABASE_KEY" \
+              -H "Authorization: Bearer $SUPABASE_KEY" \
+              -o artifacts.json
+          else
+            echo '[]' > artifacts.json
+          fi
+          echo "compliance_artifacts response:"
+          cat artifacts.json
+
+          # Build the AIG-style workflow details JSON from the DB row.
+          jq -n \
+            --slurpfile wf workflow.json \
+            --slurpfile art artifacts.json \
+            '
+            ($wf[0][0] // {}) as $w
+            | ($art[0] // []) as $arts
+            | {
+                "payload-path": ($w."payload_path" // ""),
+                "workflow-name": ($w."workflow_name" // ""),
+                "workflow-tasks-details": {
+                  "metadata": {
+                    "compliance-system-id": ($w."compliance_system_id" // ""),
+                    "change-type": ($w."change_type" // ""),
+                    "ada-scan-report": ($w."ada_scan_report" // ""),
+                    "compliance-system-name": ($w."compliance_system_name" // "")
+                  },
+                  "compliance-artifacts": ($arts | map(.artifact_path)),
+                  "workflow-status": (if $w."workflow_status" then "Active" else "Inactive" end)
+                },
+                "page-title": ($w."page_title" // ""),
+                "workflow-title": ($w."workflow_title" // ""),
+                "env": ($w."env" // ""),
+                "preview-url": ($w."preview_url" // ""),
+                "workflowid": (if $w."workflowid" == null then "" else ($w."workflowid" | tostring) end)
+              }
+            ' > workflow-details.json
+
+          echo "Workflow details JSON:"
+          cat workflow-details.json
+
+          echo "### Workflow Details Output" >> "$GITHUB_STEP_SUMMARY"
+          echo '```json' >> "$GITHUB_STEP_SUMMARY"
+          cat workflow-details.json >> "$GITHUB_STEP_SUMMARY"
+          echo '```' >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Call test API with output JSON
+        id: call_api
+        run: |
+          API_URL="https://httpbin.org/post"
+
+          curl -s -X POST "$API_URL" \
+            -H "Content-Type: application/json" \
+            --data @output.json \
+            -o api_response.json
+
+          echo "API responded with:"
+          cat api_response.json
+          echo "Link to API response: $API_URL"
+
+          echo "api_url=$API_URL" >> "$GITHUB_OUTPUT"
+
+          echo "### Test API Call" >> "$GITHUB_STEP_SUMMARY"
+          echo "**JSON input:**" >> "$GITHUB_STEP_SUMMARY"
+          echo '```json' >> "$GITHUB_STEP_SUMMARY"
+          cat output.json >> "$GITHUB_STEP_SUMMARY"
+          echo '```' >> "$GITHUB_STEP_SUMMARY"
+          echo "**Link to API response:** $API_URL" >> "$GITHUB_STEP_SUMMARY"
+          echo "**API response:**" >> "$GITHUB_STEP_SUMMARY"
+          echo '```json' >> "$GITHUB_STEP_SUMMARY"
+          cat api_response.json >> "$GITHUB_STEP_SUMMARY"
+          echo '```' >> "$GITHUB_STEP_SUMMARY"

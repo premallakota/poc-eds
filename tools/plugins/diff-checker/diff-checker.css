@@ -1,0 +1,54 @@
+body {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 20px;
+  font-family: var(--font-family, sans-serif);
+  color: #2c2c2c;
+}
+
+.diff-checker .intro {
+  margin: 0 0 16px 0;
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.diff-checker .link-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 12px 0;
+  padding: 10px 14px;
+  border-radius: 8px;
+  background: #efefef;
+  overflow-wrap: break-word;
+}
+
+.diff-checker .link-label {
+  flex: 0 0 auto;
+  font-weight: 700;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.diff-checker .link-url {
+  flex: 1 1 auto;
+  font-size: 14px;
+  color: #1473e6;
+  overflow-wrap: break-word;
+  word-break: break-all;
+}
+
+.diff-checker .copy-button {
+  flex: 0 0 auto;
+  padding: 4px 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  background: #fff;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.diff-checker .copy-button:hover {
+  background: #f5f5f5;
+}

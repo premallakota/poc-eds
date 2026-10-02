@@ -1,0 +1,12 @@
+{
+  "plugins": [
+    {
+      "id": "preflight",
+      "titleI18n": {
+        "en": "Preflight"
+      },
+      "environments": ["preview"],
+      "event": "preflight"
+    }
+  ]
+}

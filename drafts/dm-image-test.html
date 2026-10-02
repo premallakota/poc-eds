@@ -1,0 +1,70 @@
+<html>
+  <head>
+    <title>Dynamic Media Image Test</title>
+    <script src="/scripts/aem.js" type="module"></script>
+    <script src="/scripts/scripts.js" type="module"></script>
+    <link rel="stylesheet" href="/styles/styles.css"/>
+  </head>
+  <body>
+    <header></header>
+    <main>
+      <div>
+        <div>
+          <h2>img-based asset (DA inserted a resolved &lt;img&gt;)</h2>
+        </div>
+        <div class="dm-image">
+          <div>
+            <div>
+              <img src="https://delivery-p56807-e1482157.adobeaemcloud.com/adobe/assets/urn:aaid:aem:1234-5678-90ab-cdef/as/product-hero-shot.jpg" alt="Product Hero Shot">
+            </div>
+          </div>
+          <div>
+            <div>Product hero shot, Q3 campaign</div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div>
+          <h2>link-based asset (aem.assets.image.type=link)</h2>
+        </div>
+        <div class="dm-image">
+          <div>
+            <div>
+              <a href="https://delivery-p56807-e1482157.adobeaemcloud.com/adobe/assets/urn:aaid:aem:9999-8888-77aa-bbcc/as/team-offsite-photo.jpg">team-offsite-photo.jpg</a>
+            </div>
+          </div>
+          <div>
+            <div>Team offsite, September 2026</div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div>
+          <h2>unconfigured / empty block (no image, no link)</h2>
+        </div>
+        <div class="dm-image">
+          <div>
+            <div></div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div>
+          <h2>inserted via block library (extra leading name-text row before the link row)</h2>
+        </div>
+        <div class="dm-image">
+          <div>
+            <div>Dynamic Media Image</div>
+          </div>
+          <div>
+            <div><a href="https://delivery-p56807-e1482157.adobeaemcloud.com/adobe/assets/urn:aaid:aem:864842ef-1ea3-460b-920c-2dfb3ddaa711/as/Benny-dm.avif">https://delivery-p56807-e1482157.adobeaemcloud.com/adobe/assets/urn:aaid:aem:864842ef-1ea3-460b-920c-2dfb3ddaa711/as/Benny-dm.avif</a></div>
+          </div>
+          <div>
+            <div>Product hero shot, POC test</div>
+          </div>
+        </div>
+      </div>
+    </main>
+    <footer></footer>
+  </body>
+</html>

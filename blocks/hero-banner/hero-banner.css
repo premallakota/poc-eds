@@ -1,0 +1,182 @@
+/* Block: hero-banner
+   Full-bleed background-image banner with a navy left-to-right fade and
+   overlaid white heading + description + white-bordered CTA.
+   Values extracted from www.aig.com/home (.hero-banner-with-fade). */
+
+/* Full-width: escape the .section max-width/padding */
+.hero-banner-container .hero-banner-wrapper {
+  max-width: unset;
+  padding: 0;
+}
+
+/* Decorated DOM:
+   .hero-banner.block
+     > div (row 1) > div (cell) > picture > img   -- background image
+     > div (row 2) > div (cell) > h1|h2, p, p>a    -- overlay text */
+.hero-banner {
+  position: relative;
+  min-height: 320px;
+  overflow: hidden;
+}
+
+.hero-banner picture {
+  position: absolute;
+  inset: 0;
+}
+
+.hero-banner img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 50%;
+}
+
+/* Row 1: the image cell, absolutely positioned to fill the block */
+.hero-banner > div:first-child {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  display: block;
+  height: 100%;
+  width: 100%;
+}
+
+/* Navy left-to-right fade over the image (source: .cmp-teaser__image::after)
+   linear-gradient(90deg, #001871 0%, #001871 60%, transparent 100%) */
+.hero-banner::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+
+  /* Mobile: near-solid navy so full-width text stays legible */
+  background-image: linear-gradient(
+    90deg,
+    var(--heading-color) 0%,
+    var(--heading-color) 70%,
+    rgb(0 24 113 / 55%) 100%
+  );
+  pointer-events: none;
+}
+
+/* Row 2: the text overlay, sits above the fade */
+.hero-banner > div:last-child {
+  position: relative;
+  z-index: 2;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 320px;
+  box-sizing: border-box;
+  padding: 32px 24px;
+}
+
+.hero-banner > div:last-child > div {
+  width: 100%;
+}
+
+/* Row 1 inner cell fills its absolute parent */
+.hero-banner > div:first-child > div {
+  display: block;
+  height: 100%;
+  width: 100%;
+}
+
+/* Fallback when no image is authored: solid navy band */
+.hero-banner.no-image {
+  background-color: var(--heading-color);
+}
+
+.hero-banner.no-image > div:first-child,
+.hero-banner.no-image::before {
+  display: none;
+}
+
+/* Heading (H1 top hero / H2 careers) -- 44px / 56px, white */
+.hero-banner h1,
+.hero-banner h2 {
+  margin: 0 0 32px;
+  color: #fff;
+  font-size: var(--heading-size-xxl, 44px);
+  font-weight: 500;
+  line-height: 1.27;
+}
+
+.hero-banner h1 a:any-link,
+.hero-banner h2 a:any-link {
+  color: #fff;
+  text-decoration: none;
+}
+
+/* Description -- 20px / 30px, white */
+.hero-banner p {
+  margin: 0 0 15px;
+  color: #fff;
+  font-size: var(--body-font-size-m, 20px);
+  line-height: 1.5;
+}
+
+/* CTA: white-bordered box button (source .cmp-teaser__action-link).
+   EDS does NOT add a .button class to this link, so target the paragraph
+   link directly. Overrides both the global a:any-link and a.button resets. */
+.hero-banner > div:last-child p a:any-link,
+main .hero-banner a.button:any-link {
+  display: inline-block;
+  margin: 8px 0 0;
+  border: 1px solid #fff;
+  border-radius: 0;
+  padding: 16px;
+  background: transparent;
+  color: #fff;
+  font-family: var(--heading-font-family);
+  font-size: var(--body-font-size-xs, 16px);
+  font-weight: 500;
+  line-height: 1.125;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.hero-banner > div:last-child p a:any-link:hover,
+.hero-banner > div:last-child p a:any-link:focus-visible,
+main .hero-banner a.button:any-link:hover,
+main .hero-banner a.button:any-link:focus-visible {
+  background: #fff;
+  color: var(--heading-color);
+  text-decoration: none;
+}
+
+/* Desktop: overlay confined to the left ~49%, inset ~8.3% from the left edge */
+@media (width >= 900px) {
+  .hero-banner {
+    min-height: 421px;
+  }
+
+  /* Desktop: navy left-to-right fade -- solid ~45%, clear by ~75%
+     (source: .cmp-teaser__image::after) */
+  .hero-banner::before {
+    background-image: linear-gradient(
+      90deg,
+      var(--heading-color) 0%,
+      var(--heading-color) 45%,
+      rgb(0 24 113 / 0%) 75%
+    );
+  }
+
+  .hero-banner > div:last-child {
+    min-height: 421px;
+    max-width: 49%;
+    padding: 40px 0 40px 8.33%;
+  }
+
+  .hero-banner h1,
+  .hero-banner h2 {
+    font-size: 44px;
+    line-height: 56px;
+  }
+
+  .hero-banner p {
+    font-size: 20px;
+    line-height: 30px;
+  }
+}

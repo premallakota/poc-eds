@@ -1,0 +1,38 @@
+{
+  "variantName": "cards-story",
+  "baseBlock": "cards",
+  "version": "1.0.0",
+  "created": "2026-07-16T15:02:00.000Z",
+  "sourceContext": {
+    "originUrl": "https://www.aig.com/home",
+    "originPage": "AIG corporate homepage",
+    "blockPosition": "middle"
+  },
+  "visualCharacteristics": {
+    "colorScheme": "light",
+    "density": "spacious",
+    "purpose": "story",
+    "imagePattern": "large"
+  },
+  "contentPattern": {
+    "structure": "image + title + description + CTA",
+    "buttonCount": 1,
+    "imageCount": 1
+  },
+  "reuseGuidance": {
+    "suitableFor": [
+      "featured story teasers with images",
+      "feature/initiative highlight grids",
+      "newsroom or promo teaser rows with image + title + description + CTA"
+    ],
+    "notSuitableFor": [
+      "single featured item (use columns)",
+      "text-only card lists (use cards no-images)"
+    ]
+  },
+  "usage": {
+    "pagesUsing": ["/home"],
+    "reuseCount": 2,
+    "lastUsed": "2026-07-16T15:02:00.000Z"
+  }
+}

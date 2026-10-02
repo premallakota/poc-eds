@@ -2,12 +2,16 @@
 coverage/*
 logs/*
 node_modules/*
+.claude/settings.local.json
 
 helix-importer-ui
 .DS_Store
 *.bak
 .idea
+.vscode
 
 # Ensure these files are tracked
 !CLAUDE.md
 !AGENTS.md
+migration-work/navigation-validation/
+migration-work/footer-validation/

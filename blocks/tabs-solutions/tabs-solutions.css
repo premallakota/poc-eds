@@ -1,0 +1,170 @@
+/* tabs-solutions -- AIG "Risk Solutions" tab switcher.
+   Values extracted from computed styles of www.aig.com/home .aig-tabs.
+   Section pale-blue band is handled by .section.paleblue globally. */
+
+/* Selectors below target independent panel regions (tab labels, lead
+   description, sub-teasers, CTA links); their source order reflects DOM
+   flow rather than ascending specificity. */
+/* stylelint-disable no-descending-specificity */
+
+/* ---- Tablist (centered row of tabs) ---- */
+.tabs-solutions .tabs-solutions-list {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0;
+  margin-top: 16px;
+  padding: 0;
+  overflow: visible;
+}
+
+/* ---- Tab labels (shared) ---- */
+.tabs-solutions .tabs-solutions-list button.tabs-solutions-tab {
+  flex: 0 0 auto;
+  margin: 0 12px;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  border-radius: 0;
+  padding: 15px 3px 14px;
+  background-color: transparent;
+  font-family: var(--heading-font-family);
+  font-size: var(--heading-font-size-l);
+  font-weight: 500;
+  line-height: 1.2;
+  letter-spacing: 0.58px;
+  text-transform: uppercase;
+  text-decoration: none;
+  cursor: pointer;
+  transition: color 0.2s, border-color 0.2s;
+}
+
+.tabs-solutions :where(.tabs-solutions-list button.tabs-solutions-tab) p {
+  margin: 0;
+}
+
+/* Inactive tab */
+.tabs-solutions .tabs-solutions-list button.tabs-solutions-tab[aria-selected='false'] {
+  color: #5b5c60;
+}
+
+/* Active tab: brand link blue with underline indicator */
+.tabs-solutions .tabs-solutions-list button.tabs-solutions-tab[aria-selected='true'] {
+  color: var(--link-color);
+  border-bottom-color: var(--link-color);
+  cursor: default;
+}
+
+/* ---- Tab panel (white content card, centered) ---- */
+.tabs-solutions .tabs-solutions-panel {
+  max-width: 930px;
+  margin: 30px auto 15px;
+  padding: 0;
+  border: 0;
+  background-color: var(--background-color);
+  overflow: visible;
+}
+
+.tabs-solutions .tabs-solutions-panel[aria-hidden='true'] {
+  display: none;
+}
+
+/* Panel content wrapper: banner image sits flush, text gets padding */
+.tabs-solutions .tabs-solutions-panel > div > p {
+  margin: 0 0 16px;
+  padding: 0 32px;
+  color: var(--heading-color);
+  font-size: var(--body-font-size-m);
+  line-height: 1.5;
+}
+
+/* Banner image: full width, flush to card edges */
+.tabs-solutions .tabs-solutions-panel > div > p:first-child {
+  margin: 0;
+  padding: 0;
+}
+
+.tabs-solutions .tabs-solutions-panel img {
+  width: 100%;
+  object-fit: cover;
+}
+
+/* First (lead) description gets top spacing below the banner */
+.tabs-solutions .tabs-solutions-panel > div > p:nth-child(2) {
+  margin-top: 32px;
+}
+
+/* ---- Sub-teasers (Risk Managers / Brokers & Agents) ---- */
+.tabs-solutions .tabs-solutions-subteasers {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 32px;
+  margin-top: 24px;
+  padding: 0 32px;
+}
+
+.tabs-solutions .tabs-solutions-subteaser > * {
+  padding: 0;
+}
+
+.tabs-solutions .tabs-solutions-subteaser h3 {
+  margin: 0 0 16px;
+  color: var(--heading-color);
+  font-family: var(--heading-font-family);
+  font-size: var(--heading-font-size-l);
+  font-weight: 500;
+  line-height: 1.25;
+}
+
+.tabs-solutions .tabs-solutions-subteaser p {
+  margin: 0 0 16px;
+  color: var(--heading-color);
+  font-size: var(--body-font-size-m);
+  line-height: 1.5;
+}
+
+/* ---- CTA links: futura, blue, no underline (overrides global button/link styles) ---- */
+.tabs-solutions .tabs-solutions-panel a:any-link,
+.tabs-solutions .tabs-solutions-panel a.button:any-link {
+  display: inline;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--link-color);
+  font-family: var(--heading-font-family);
+  font-size: var(--body-font-size-m);
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.tabs-solutions .tabs-solutions-panel a:any-link:hover,
+.tabs-solutions .tabs-solutions-panel a.button:any-link:hover {
+  color: var(--link-hover-color);
+  text-decoration: none;
+}
+
+/* Heading link inside sub-teaser stays navy */
+.tabs-solutions .tabs-solutions-subteaser h3 a:where(:any-link) {
+  color: var(--heading-color);
+  font-family: var(--heading-font-family);
+}
+
+/* Row of two CTA links stacks vertically (specificity must beat the
+   `.tabs-solutions-panel a:any-link { display: inline }` rule above) */
+.tabs-solutions .tabs-solutions-panel > div > p a:any-link + a:any-link,
+.tabs-solutions .tabs-solutions-subteaser p a:any-link + a:any-link {
+  display: block;
+  margin-top: 8px;
+}
+
+/* ---- Desktop layout ---- */
+@media (width >= 900px) {
+  .tabs-solutions .tabs-solutions-list button.tabs-solutions-tab {
+    margin: 0 22px;
+    padding: 15px 3px 26px;
+  }
+
+  .tabs-solutions .tabs-solutions-subteasers {
+    grid-template-columns: 1fr 1fr;
+    gap: 83px;
+  }
+}
