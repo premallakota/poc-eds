@@ -1,6 +1,53 @@
 # Video Sitemap Generator App
 
-An Adobe App Builder (DA) application that generates a **Google Video Sitemap XML** on-demand from the project's `/video-index.json` and publishes it directly to `/video-sitemap.xml` on the live site — **no repo commit or local Node.js environment required**.
+An **AEM Document Authoring (DA) App** that generates a **Google Video Sitemap XML** on-demand from the project's `/video-index.json` and publishes it directly to `/video-sitemap.xml` on the live site — **no repo commit or local Node.js environment required**.
+
+---
+
+## What is DA App Builder? (Is it built into EDS?)
+
+**Short answer: No — but it is built into [da.live](https://da.live), which is the Document Authoring platform that sits alongside EDS.**
+
+| Platform | What it is |
+|----------|-----------|
+| **EDS (Edge Delivery Services)** | The content delivery layer — renders pages from Google Docs/SharePoint source using blocks, scripts, and styles in your GitHub repo |
+| **DA (Document Authoring / da.live)** | Adobe's browser-based authoring shell — replaces the raw Google Docs / SharePoint UI with a richer editing experience; manages source files via `admin.da.live` |
+| **DA App Builder** | A **micro-app extensibility framework built into da.live** — any HTML/JS/CSS file placed under `tools/apps/<name>/` in your EDS repo can be loaded as a first-class app inside the DA shell at `https://da.live/app/{org}/{repo}/tools/apps/<name>/<name>` |
+
+### DA App Builder vs Adobe App Builder
+
+These are **two completely different things**:
+
+| | DA App Builder | Adobe App Builder (legacy) |
+|--|----------------|---------------------------|
+| **What** | Micro-app iframes embedded in da.live | Serverless Node.js apps on Adobe I/O Runtime |
+| **Auth** | Uses DA's own IMS session token (passed via `DA_SDK`) | Requires separate Adobe I/O credentials / OAuth |
+| **Hosting** | Your GitHub repo (EDS serves the files) | Adobe I/O Runtime / cloud |
+| **Tech** | Plain HTML + ES modules (LitElement, Shoelace) | Node.js, React, Express |
+| **Purpose** | Extend the DA authoring shell with custom tooling | Build full serverless apps on Adobe's platform |
+
+### How DA App Builder works with EDS
+
+```
+GitHub Repo (poc-eds)
+  └── tools/apps/video-sitemap/
+        ├── video-sitemap.html   ← entry point (loaded in DA iframe)
+        ├── video-sitemap.js     ← LitElement component
+        └── video-sitemap.css    ← styles
+
+EDS serves these files at:
+  https://main--poc-eds--premallakota.aem.live/tools/apps/video-sitemap/...
+
+DA shell loads the app at:
+  https://da.live/app/premallakota/poc-eds/tools/apps/video-sitemap/video-sitemap
+         ↑ DA host       ↑ org   ↑ repo    ↑ path to your HTML entry point
+```
+
+The DA SDK (`https://da.live/nx/utils/sdk.js`) provides `context` (org, repo, path) and `token` (IMS auth token) to the app so it can call the AEM Admin API on behalf of the signed-in user.
+
+**Requirement to publish:** The user must be **signed in to da.live** — the sign-in provides the IMS token used for `admin.hlx.page` calls.
+
+---
 
 ## How It Works
 
