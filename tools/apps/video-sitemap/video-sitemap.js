@@ -213,6 +213,10 @@ class VideoSitemapApp extends LitElement {
   // -------------------------------------------------------------------------
   // Step 1: Generate sitemap XML from /video-index.json
   // -------------------------------------------------------------------------
+  get _indexUrl() {
+    return new URL('/video-index.json', window.location.origin).href;
+  }
+
   async _generate() {
     const host = (this._hostValue || '').trim().replace(/\/$/, '');
     if (!host) {
@@ -229,7 +233,7 @@ class VideoSitemapApp extends LitElement {
     this._liveUrl = '';
 
     try {
-      const url = `${host}/video-index.json`;
+      const url = this._indexUrl;
       const res = await fetch(url);
       if (!res.ok) {
         throw new Error(`Failed to fetch ${url}: ${res.status} ${res.statusText}`);
@@ -249,7 +253,9 @@ class VideoSitemapApp extends LitElement {
       this._state = 'done';
     } catch (err) {
       console.error('[video-sitemap] generate:', err);
-      this._errorMsg = err.message;
+      this._errorMsg = err instanceof TypeError
+        ? `Could not fetch ${this._indexUrl}. Check the browser Network panel for CORS, redirects, or connection errors. ${err.message}`
+        : err.message;
       this._state = 'error';
     }
   }
@@ -373,7 +379,7 @@ class VideoSitemapApp extends LitElement {
     return html`
       <div class="vs-status" role="status" aria-live="polite" aria-busy="true">
         <div class="vs-spinner" aria-hidden="true"></div>
-        <p>Fetching <code>${this._hostValue}/video-index.json</code>…</p>
+        <p>Fetching <code>${this._indexUrl}</code>…</p>
       </div>
     `;
   }
@@ -450,7 +456,7 @@ class VideoSitemapApp extends LitElement {
             <span>
               Generated <strong>${this._entryCount}</strong>
               video ${this._entryCount === 1 ? 'entry' : 'entries'} from
-              <code>${this._hostValue}/video-index.json</code>
+              <code>${this._indexUrl}</code>
             </span>
           </div>
           <div class="vs-result-actions">

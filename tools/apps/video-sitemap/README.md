@@ -51,7 +51,7 @@ The DA SDK (`https://da.live/nx/utils/sdk.js`) provides `context` (org, repo, pa
 
 ## How It Works
 
-1. The app fetches `<host>/video-index.json` at runtime from the configured EDS live host.
+1. The app fetches `/video-index.json` from the app iframe's own origin to avoid cross-origin requests. An app hosted on an EDS preview origin reads the preview index, not the live index. The configured EDS host is still used for sitemap page URLs.
 2. It filters rows that contain a `videourl` column (same logic as `tools/generate-video-sitemap.js`).
 3. It builds a valid `video-sitemap.xml` string in memory using the Google Video Sitemap schema.
 4. The result is displayed in a scrollable code preview inside the DA iframe.
@@ -62,6 +62,8 @@ The DA SDK (`https://da.live/nx/utils/sdk.js`) provides `context` (org, repo, pa
 6. The sitemap is now live at `<host>/video-sitemap.xml`.
 
 Alternatively, use **Copy XML** or **Download** to get the raw XML without publishing.
+
+The iframe must be hosted on the EDS site serving the index. A redirect to another origin can still require server-side CORS configuration; `mode: 'no-cors'` cannot provide readable JSON.
 
 ## XML Schema
 
@@ -106,7 +108,7 @@ Only rows with a non-empty `videourl` are included.
 
 | Parameter | Required | Description |
 |-----------|----------|-------------|
-| `host`    | No       | Override the EDS live host (e.g. `https://main--myrepo--myorg.aem.live`). If omitted the app derives the host from the DA context (`org`/`repo`). |
+| `host`    | No       | Override the canonical host for sitemap page URLs and the displayed live sitemap URL (e.g. `https://main--myrepo--myorg.aem.live`). If omitted the app derives the host from the DA context (`org`/`repo`). This does not change the index fetch origin. |
 
 **Example DA App URL:**
 ```
@@ -123,7 +125,7 @@ https://da.live/app/kprasad05/aig-eds-migration-poc/tools/apps/video-sitemap/vid
 ```
 App
  │
- ├─1─ GET  <host>/video-index.json          → filter videourl rows → build XML in memory
+ ├─1─ GET  <iframe-origin>/video-index.json → filter videourl rows → build XML in memory
  │
  ├─2─ PUT  admin.da.live/source/{org}/{site}/video-sitemap.xml   (DA source storage)
  │
