@@ -52,7 +52,7 @@ The DA SDK (`https://da.live/nx/utils/sdk.js`) provides `context` (org, repo, pa
 ## How It Works
 
 1. The app fetches `/video-index.json` from the app iframe's own origin to avoid cross-origin requests. An app hosted on an EDS preview origin reads the preview index, not the live index. The configured EDS host is still used for sitemap page URLs.
-2. It filters rows that contain a `videourl` column (same logic as `tools/generate-video-sitemap.js`).
+2. It filters rows that contain a non-empty `videourl` column.
 3. It builds a valid `video-sitemap.xml` string in memory using the Google Video Sitemap schema.
 4. The result is displayed in a scrollable code preview inside the DA iframe.
 5. The user clicks **"Publish to /video-sitemap.xml"**, which runs three steps automatically:
@@ -135,7 +135,7 @@ App
           → sitemap is now live at <host>/video-sitemap.xml
 ```
 
-The DA SDK token (IMS Bearer) is forwarded on all three API calls so the user's session is used — no separate auth token is needed.
+The DA SDK token (IMS Bearer) is sent as `Authorization` on all three API calls. Preview and live requests also send `x-content-source-authorization` so AEM can read the DA source. The signed-in user must have the site's required preview and publish permissions.
 
 ## App States
 
@@ -157,6 +157,6 @@ The DA SDK token (IMS Bearer) is forwarded on all three API calls so the user's 
 | `video-sitemap.css`   | Styles — light/dark theme, toolbar, XML preview, published state |
 | `README.md`           | This file                                              |
 
-## Relationship to `tools/generate-video-sitemap.js`
+## DA-Only Generation
 
-The CLI script (`tools/generate-video-sitemap.js`) writes `video-sitemap.xml` to disk and is used by the `.github/workflows/video-sitemap.yaml` daily CI workflow. This App Builder app is its browser-based, on-demand equivalent for content authors/editors inside DA — it publishes the sitemap directly to the live site via the AEM Admin API without touching the repository.
+This app is the only video sitemap generation and publishing process. The generated XML is stored in DA source and previewed and published as `/video-sitemap.xml`; it is not stored in Git. Regenerate and publish from the app after changing video content. There is no scheduled video sitemap workflow or local CLI generator. The page sitemap and article RSS feed retain their existing processes.

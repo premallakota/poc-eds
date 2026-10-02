@@ -45,7 +45,7 @@ try {
 }
 
 // ---------------------------------------------------------------------------
-// XML helpers  (mirrors tools/generate-video-sitemap.js logic)
+// XML helpers
 // ---------------------------------------------------------------------------
 
 function escapeXml(value) {
@@ -136,14 +136,16 @@ async function writeToDA(org, site, xml, token) {
 }
 
 /**
- * Trigger AEM preview for /video-sitemap.xml via admin.aem.page
- * (correct admin host for aem.live/aem.page stack repos)
+ * Trigger AEM preview for /video-sitemap.xml via admin.hlx.page
  */
 async function triggerPreview(org, site, token) {
-  const url = `https://admin.aem.page/preview/${org}/${site}/main/video-sitemap.xml`;
+  const url = `https://admin.hlx.page/preview/${org}/${site}/main/video-sitemap.xml`;
   const res = await fetch(url, {
     method: 'POST',
-    headers: token ? { Authorization: `Bearer ${token}` } : {},
+    headers: token ? {
+      Authorization: `Bearer ${token}`,
+      'x-content-source-authorization': `Bearer ${token}`,
+    } : {},
   });
   if (!res.ok) {
     const text = await res.text().catch(() => '');
@@ -152,13 +154,16 @@ async function triggerPreview(org, site, token) {
 }
 
 /**
- * Publish /video-sitemap.xml to the live site via admin.aem.page
+ * Publish /video-sitemap.xml to the live site via admin.hlx.page
  */
 async function publishToLive(org, site, token) {
-  const url = `https://admin.aem.page/live/${org}/${site}/main/video-sitemap.xml`;
+  const url = `https://admin.hlx.page/live/${org}/${site}/main/video-sitemap.xml`;
   const res = await fetch(url, {
     method: 'POST',
-    headers: token ? { Authorization: `Bearer ${token}` } : {},
+    headers: token ? {
+      Authorization: `Bearer ${token}`,
+      'x-content-source-authorization': `Bearer ${token}`,
+    } : {},
   });
   if (!res.ok) {
     const text = await res.text().catch(() => '');
@@ -295,7 +300,7 @@ class VideoSitemapApp extends LitElement {
       this._state = 'published';
     } catch (err) {
       console.error('[video-sitemap] publish:', err);
-      this._errorMsg = err.message;
+      this._errorMsg = `${this._publishStep} ${err.message}`;
       this._state = 'error';
     }
   }

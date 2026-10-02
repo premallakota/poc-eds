@@ -52,41 +52,40 @@ which that reference doesn't use either.
    `/video-index.json`, with columns `videourl` (from the block link),
    `videothumbnail` (from the block's poster image), `image` (page-level
    `og:image`, used as a thumbnail fallback).
-2. `tools/generate-video-sitemap.js` fetches `/video-index.json`, keeps
-   only rows where `videourl` is set, and builds `video-sitemap.xml`:
+2. The DA Video Sitemap Generator app reads `/video-index.json` from
+   its iframe origin, keeps only rows where `videourl` is set, and builds
+   the XML in memory. An app on a preview origin reads the preview index.
+   The configured canonical host is used for sitemap page URLs:
    - `<video:player_loc>` for YouTube/Vimeo links (embeds), or
      `<video:content_loc>` for direct file URLs.
    - Thumbnail preference order: block poster → page `og:image` → legacy
      `thumbnail` field (a fallback for a known reindex gap on old rows).
-3. `.github/workflows/video-sitemap.yaml` runs this daily (`0 6 * * *`,
-   plus manual `workflow_dispatch`), commits `video-sitemap.xml` to `main`
-   if it changed, which is then served as a static file at
-   `/video-sitemap.xml`.
+3. The author selects **Publish to /video-sitemap.xml**. The app writes
+   the XML to DA source, then calls `admin.hlx.page` to preview and publish
+   it. AEM requests send both `Authorization` and
+   `x-content-source-authorization` with the DA SDK token.
+4. DA is the only video sitemap process. The generated XML is not kept
+   in Git, and there is no local generator or scheduled video workflow.
+   Regenerate and publish from the app whenever video content changes.
 
 **Steps to test:**
 1. Add a `video-feature` block with a real video link to a page, preview
    and publish it.
 2. Check it landed correctly:
-   `curl https://main--aig-eds-migration-poc--kprasad05.aem.live/video-index.json`
+   `curl https://main--poc-eds--premallakota.aem.live/video-index.json`
    — the page's row should show `videourl` populated. If it doesn't and
    the page was already published before a `video-index` config change,
    trigger **Reindex** for `video-index` in Index Admin (same tool as
    above).
-3. Run the generator locally against live data and inspect the output:
-   ```
-   node tools/generate-video-sitemap.js https://main--aig-eds-migration-poc--kprasad05.aem.live
-   cat video-sitemap.xml
-   ```
-   Confirm only pages with a real video block appear (a page with just a
-   poster image and no link should be excluded — `/drafts/dorothy/home`
-   is a real example of this negative case).
-4. Confirm it's actually live:
-   `curl https://main--aig-eds-migration-poc--kprasad05.aem.live/video-sitemap.xml`
-   should return XML with the `video:video` / `xmlns:video` namespace, not
-   a plain page sitemap. If it doesn't match what the generator produced
-   locally, the daily workflow hasn't committed yet — check its run
-   history under the repo's Actions tab, or trigger it manually via
-   `workflow_dispatch`.
+3. Open https://da.live/app/premallakota/poc-eds/tools/apps/video-sitemap/video-sitemap,
+   sign in, and select **Generate Sitemap**. Confirm only pages with a
+   real video link appear in the XML preview.
+4. Select **Publish to /video-sitemap.xml** and confirm the app reports
+   success. The signed-in user needs preview and publish permissions.
+5. Check `https://main--poc-eds--premallakota.aem.live/video-sitemap.xml`
+   returns the generated XML with the `video:video` / `xmlns:video`
+   namespace, not a plain page sitemap. If publishing fails, the app's
+   error identifies the source-write, preview, or live stage.
 
 ## Article RSS feed
 
@@ -168,12 +167,8 @@ under `/articles/`.
   Sitemap: https://{production-domain}/sitemap.xml
   Sitemap: https://{production-domain}/video-sitemap.xml'
   ```
-- **The daily workflow silently committed nothing for its first 12 runs**
-  (fixed in the `fix/video-sitemap-commit` branch/PR) — `git diff --quiet`
-  only compares tracked files, so a never-committed `video-sitemap.xml`
-  always looked like "no changes". The fix stages the file before
-  diffing. Confirm this PR is merged before trusting that
-  `/video-sitemap.xml` is being kept up to date automatically.
+- The video sitemap is updated on demand through the DA app, not
+   automatically. Regenerate and publish after changing video content.
 - Only two pages currently have a real video (`/drafts/purush/video`,
   `/drafts/purush/test`), both pointing at the same test YouTube link —
   fine for proving the mechanism works, but not representative of real
