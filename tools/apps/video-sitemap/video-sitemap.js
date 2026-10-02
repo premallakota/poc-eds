@@ -115,35 +115,35 @@ function resolveOrgSite(context) {
 // ---------------------------------------------------------------------------
 
 /**
- * Write XML content via AEM Admin source API so AEM can preview & publish it.
- * PUT https://admin.hlx.page/source/{org}/{site}/main/video-sitemap.xml
- * Uses the same token as preview/live (no separate IMS auth required).
+ * Write XML to DA source storage.
+ * DA SDK token is an IMS Bearer token → use admin.da.live with Authorization: Bearer <token>
+ * Path format: /{org}/{site}/video-sitemap.xml  (no branch in DA source path)
  */
-async function writeToSource(org, site, xml, token) {
-  const url = `https://admin.hlx.page/source/${org}/${site}/main/video-sitemap.xml`;
+async function writeToDA(org, site, xml, token) {
+  const url = `https://admin.da.live/source/${org}/${site}/video-sitemap.xml`;
+  const blob = new Blob([xml], { type: 'application/xml' });
+  const form = new FormData();
+  form.append('data', blob, 'video-sitemap.xml');
   const res = await fetch(url, {
     method: 'PUT',
-    headers: {
-      'Content-Type': 'application/xml',
-      ...(token ? { Authorization: `token ${token}` } : {}),
-    },
-    body: xml,
+    headers: { Authorization: `Bearer ${token}` },
+    body: form,
   });
   if (!res.ok) {
     const text = await res.text().catch(() => '');
-    throw new Error(`Source write failed (${res.status}): ${text || res.statusText}`);
+    throw new Error(`DA source write failed (${res.status}): ${text || res.statusText}`);
   }
 }
 
 /**
- * Trigger AEM preview for /video-sitemap.xml
- * POST https://admin.hlx.page/preview/{org}/{site}/main/video-sitemap.xml
+ * Trigger AEM preview for /video-sitemap.xml via admin.aem.page
+ * (correct admin host for aem.live/aem.page stack repos)
  */
 async function triggerPreview(org, site, token) {
-  const url = `https://admin.hlx.page/preview/${org}/${site}/main/video-sitemap.xml`;
+  const url = `https://admin.aem.page/preview/${org}/${site}/main/video-sitemap.xml`;
   const res = await fetch(url, {
     method: 'POST',
-    headers: token ? { Authorization: `token ${token}` } : {},
+    headers: token ? { Authorization: `Bearer ${token}` } : {},
   });
   if (!res.ok) {
     const text = await res.text().catch(() => '');
@@ -152,14 +152,13 @@ async function triggerPreview(org, site, token) {
 }
 
 /**
- * Publish /video-sitemap.xml to the live site.
- * POST https://admin.hlx.page/live/{org}/{site}/main/video-sitemap.xml
+ * Publish /video-sitemap.xml to the live site via admin.aem.page
  */
 async function publishToLive(org, site, token) {
-  const url = `https://admin.hlx.page/live/${org}/${site}/main/video-sitemap.xml`;
+  const url = `https://admin.aem.page/live/${org}/${site}/main/video-sitemap.xml`;
   const res = await fetch(url, {
     method: 'POST',
-    headers: token ? { Authorization: `token ${token}` } : {},
+    headers: token ? { Authorization: `Bearer ${token}` } : {},
   });
   if (!res.ok) {
     const text = await res.text().catch(() => '');
@@ -272,9 +271,9 @@ class VideoSitemapApp extends LitElement {
     this._errorMsg = '';
 
     try {
-      this._publishStep = 'Writing to source…';
+      this._publishStep = 'Writing to DA source…';
       this.requestUpdate();
-      await writeToSource(org, site, this._xml, this.token);
+      await writeToDA(org, site, this._xml, this.token);
 
       this._publishStep = 'Triggering preview…';
       this.requestUpdate();
