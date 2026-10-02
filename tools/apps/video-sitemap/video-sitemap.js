@@ -102,12 +102,12 @@ function resolveHost(context, urlParams) {
   if (context?.org && context?.repo) {
     return `https://main--${context.repo}--${context.org}.aem.live`;
   }
-  return 'https://main--aig-eds-migration-poc--kprasad05.aem.live';
+  return 'https://main--poc-eds--premallakota.aem.live';
 }
 
 function resolveOrgSite(context) {
   if (context?.org && context?.repo) return { org: context.org, site: context.repo };
-  return { org: 'kprasad05', site: 'aig-eds-migration-poc' };
+  return { org: 'premallakota', site: 'poc-eds' };
 }
 
 // ---------------------------------------------------------------------------
