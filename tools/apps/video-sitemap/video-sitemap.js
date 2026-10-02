@@ -115,22 +115,23 @@ function resolveOrgSite(context) {
 // ---------------------------------------------------------------------------
 
 /**
- * Write XML content to DA source storage so AEM can preview & publish it.
- * PUT https://admin.da.live/source/{org}/{site}/video-sitemap.xml
+ * Write XML content via AEM Admin source API so AEM can preview & publish it.
+ * PUT https://admin.hlx.page/source/{org}/{site}/main/video-sitemap.xml
+ * Uses the same token as preview/live (no separate IMS auth required).
  */
-async function writeToDA(org, site, xml, token) {
-  const url = `https://admin.da.live/source/${org}/${site}/video-sitemap.xml`;
+async function writeToSource(org, site, xml, token) {
+  const url = `https://admin.hlx.page/source/${org}/${site}/main/video-sitemap.xml`;
   const res = await fetch(url, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/xml',
-      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      ...(token ? { Authorization: `token ${token}` } : {}),
     },
     body: xml,
   });
   if (!res.ok) {
     const text = await res.text().catch(() => '');
-    throw new Error(`DA source write failed (${res.status}): ${text || res.statusText}`);
+    throw new Error(`Source write failed (${res.status}): ${text || res.statusText}`);
   }
 }
 
@@ -263,9 +264,9 @@ class VideoSitemapApp extends LitElement {
     this._errorMsg = '';
 
     try {
-      this._publishStep = 'Writing to DA source…';
+      this._publishStep = 'Writing to source…';
       this.requestUpdate();
-      await writeToDA(org, site, this._xml, this.token);
+      await writeToSource(org, site, this._xml, this.token);
 
       this._publishStep = 'Triggering preview…';
       this.requestUpdate();
