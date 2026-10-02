@@ -205,6 +205,8 @@ class VideoSitemapApp extends LitElement {
   _init() {
     const urlParams = new URLSearchParams(window.location.search);
     this._hostValue = resolveHost(this.context, urlParams);
+    console.log('[video-sitemap] context:', JSON.stringify(this.context));
+    console.log('[video-sitemap] token present:', !!this.token, 'len:', this.token?.length ?? 0);
     this._state = 'idle';
   }
 
@@ -454,7 +456,10 @@ class VideoSitemapApp extends LitElement {
           <div class="vs-result-actions">
             ${!this.token ? html`
               <div class="vs-signin-warning">
-                ⚠️ Sign in to DA to enable publishing
+                ⚠️ Not signed in — go to
+                <a href="https://da.live" target="_top" style="color:inherit;font-weight:700;text-decoration:underline;">da.live</a>,
+                sign in, then
+                <button style="margin-left:4px;cursor:pointer;font-size:0.82rem;padding:2px 8px;border-radius:4px;border:1px solid currentColor;background:transparent;color:inherit;" onclick="window.location.reload()">reload page</button>
               </div>
             ` : nothing}
             <sl-button class="pw-quiet-secondary vs-action-btn" @click=${() => this._copyXml()}>
